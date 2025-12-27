@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エオルゼア国勢調査</title>
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+            font-family: "Meiryo", sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #16213e;
+            border: 2px solid #c9a86a; /* FF14風のゴールド枠 */
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(201, 168, 106, 0.5);
+        }
+        h2 { color: #c9a86a; text-shadow: 1px 1px 2px #000; }
+        .question { margin: 20px 0; text-align: left; border-bottom: 1px solid #444; padding-bottom: 10px; }
+        label { display: block; margin: 5px 0; cursor: pointer; }
+        input[type="radio"] { transform: scale(1.2); margin-right: 10px; }
+        
+        /* ボタンのデザイン */
+        button {
+            background: linear-gradient(to bottom, #c9a86a, #8c7335);
+            color: #fff;
+            border: 1px solid #fff;
+            padding: 10px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            text-shadow: 1px 1px 0 #333;
+            margin-top: 20px;
+        }
+        button:hover { opacity: 0.9; }
+        
+        /* ログイン画面の入力欄 */
+        input[type="password"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #666;
+            background: #eee;
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="loginScreen" class="container">
+        <h2>🔒 認証システム</h2>
+        <p>パスワードを入力してください</p>
+        <input type="password" id="passInput" placeholder="Password">
+        <br><br>
+        <button onclick="checkPass()">LOGIN</button>
+    </div>
+
+    <div id="surveyScreen" class="container hidden">
+        <h2>📜 エオルゼア意識調査</h2>
+
+        <div class="question">
+            <p><strong>Q1. あなたのメインロールは？</strong></p>
+            <label><input type="radio" name="q1" value="タンク"> 🛡️ タンク</label>
+            <label><input type="radio" name="q1" value="DPS"> ⚔️ DPS</label>
+            <label><input type="radio" name="q1" value="ヒーラー"> 💚 ヒーラー</label>
+        </div>
+
+        <div class="question">
+            <p><strong>Q2. 好きなコンテンツは？</strong></p>
+            <label><input type="radio" name="q2" value="ダンジョン"> 🏰 ダンジョン</label>
+            <label><input type="radio" name="q2" value="討滅戦"> 👹 討滅戦</label>
+            <label><input type="radio" name="q2" value="PvP"> ⚔️ PvP (対人戦)</label>
+        </div>
+
+        <div class="question">
+            <p><strong>Q3. 好きなキャラは？</strong></p>
+            <label><input type="radio" name="q3" value="モーグリ"> 🐾 モーグリ</label>
+            <label><input type="radio" name="q3" value="チョコボ"> 🐥 チョコボ</label>
+            <label><input type="radio" name="q3" value="妖精"> 🧚 妖精</label>
+        </div>
+
+        <button onclick="sendMail()">回答を送信する</button>
+    </div>
+
+    <script>
+        // ログイン処理
+        function checkPass() {
+            const input = document.getElementById('passInput').value;
+            // パスワード判定（"FF14" または "ff14" でOKにしています）
+            if (input.toUpperCase() === "FF14") {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('surveyScreen').classList.remove('hidden');
+            } else {
+                alert("パスワードが違います！(ヒント: ゲームのタイトル)");
+            }
+        }
+
+        // メール送信処理（裏ワザ）
+        function sendMail() {
+            // 選ばれた選択肢を取得する
+            const q1 = document.querySelector('input[name="q1"]:checked')?.value || "未回答";
+            const q2 = document.querySelector('input[name="q2"]:checked')?.value || "未回答";
+            const q3 = document.querySelector('input[name="q3"]:checked')?.value || "未回答";
+
+            // ★ここにあなたのメールアドレスを入れてください★
+            const myEmail = "あなたのメールアドレス@example.com";
+            
+            const subject = "FF14アンケート回答";
+            const body = `【回答内容】%0D%0Aロール：${q1}%0D%0Aコンテンツ：${q2}%0D%0Aキャラ：${q3}`;
+
+            // メーラーを起動する魔法の呪文
+            window.location.href = `mailto:${myEmail}?subject=${subject}&body=${body}`;
+        }
+    </script>
+</body>
+</html>
